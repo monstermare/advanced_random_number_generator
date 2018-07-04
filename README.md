@@ -8,4 +8,4 @@ A random number generator is essentially under the category of _Deterministic Fi
 
 ## Algorithms for the random numbers
 	Middle-square method: 
-	![alt text](https://latex.codecogs.com/gif.latex?\fn_phv&space;X_{n&plus;1}=X_n^2" title="X_{n+1}=X_n^2)
+	![alt text](https://latex.codecogs.com/gif.latex?%5Cfn_phv%20X_%7Bn&plus;1%7D%3DX_n%5E2)
