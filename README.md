@@ -12,3 +12,4 @@ A random number generator is essentially under the category of _Deterministic Fi
 
 ![equation](https://latex.codecogs.com/gif.latex?\fn_phv&space;X_{n&plus;1}=X_n^2)
 
+![equation](https://latex.codecogs.com/gif.latex?\fn_phv&space;X_0)
