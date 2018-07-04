@@ -9,5 +9,6 @@ A random number generator is essentially under the category of _Deterministic Fi
 ## Algorithms for the random numbers
 	
 # Middle-square Method
+
 ![equation](https://latex.codecogs.com/gif.latex?\fn_phv&space;X_{n&plus;1}=X_n^2)
 
