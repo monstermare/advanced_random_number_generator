@@ -17,7 +17,7 @@ The method can be described as a closed-form expression like:
 ![equation](https://latex.codecogs.com/gif.latex?\fn_cm&space;X_{n&plus;1}=(aX_n&plus;c)\mod{m})
 
 where a, c, and m are constant number satisfies the following conditions
->m > 0
+>m > 0\
 >0 < a < m
 >0 <= c < m
 
