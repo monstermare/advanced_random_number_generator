@@ -56,7 +56,7 @@ If you run this code, you will see it nicely outputs random numbers.
 
 ## The Advanced Random Number Generator
 As we discussed above, the LCG has limitation that the numbers can be predictable. Technically, if you have a good computer (like supercomputer!), sequence of the generated numbers, and an appropriate algorithm, you can find the seed number. This is not only LCG's limitation but all of pseudorandom number generators. Some might be harder to predict (or almost impossible with the current technology), but theoretically, every pseudorandom numbers can be predictable.\
-Then is it really impossible to make a true random number? Well, if we define the randomness is the one that cannot be predictable, it is actually possible to generate a true random number!\
+Then is it really impossible to make a true random number? Well, if we define the randomness is the one that cannot be predictable, it is actually possible to generate a true random number!
 
 ### Noise
 The noise is pretty common stuff. When you're listening music, changing radio station, or speaking over the phone, you could hear the noise. Noise is somewhat unpredictable. The idea starts from here; if we can use those noise for the random numbers, the numbers generated will be unpredictable, too.\
