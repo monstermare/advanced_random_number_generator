@@ -56,16 +56,7 @@ while(1):
 
 And when you run this code, you will see the algorithm is repeatedly generating sequence of numbers:
 
->17
->12
->32
->7
->52
->37
->42
->22
->47
->2
+>17 12 32 7 52 37 42 22 47 2 ...
 
 ## The Advanced Random Number Generator
 As we discussed above, the LCG has limitation that the numbers can be predictable. Technically, if you have a good computer (like supercomputer!), sequence of the generated numbers, and an appropriate algorithm, you can find the seed number. This is not only LCG's limitation but all of pseudorandom number generators. Some might be harder to predict (or almost impossible with the current technology), but theoretically, every pseudorandom numbers can be predictable.\
