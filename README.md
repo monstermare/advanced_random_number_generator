@@ -24,10 +24,12 @@ where a, c, and m are constant number satisfies the following conditions
 
 the seed number ![equation](https://latex.codecogs.com/gif.latex?\fn_phv&space;X_0) should be a non-zero natural number and smaller than m
 
-In LCG, it is really important to pick a good number for those constants to have a maximum period length. As your period length gets longer, the numbers generated are more safe from the prediction. You can calculate the best combinations for practice, but I will just pick one of the combinations listed on the wikipedia for convenience.
->m = 281,474,976,710,656\
->a = 25,214,903,917\
->c = 11
+In LCG, it is really important to pick a good number for those constants to have a maximum period length. As your period length gets longer, the numbers generated are more safe from the prediction. 
+You can calculate the best combinations for practice, 
+but in this practice, we will pick some small numbers so we can see the cycle of numbers generated
+>m = 10\
+>a = 5\
+>c = 1\
 
 
 So now we get everything we need for developing the LCG, and here is the sample code that outputs random numbers to check if it is working nicely.
@@ -35,9 +37,9 @@ So now we get everything we need for developing the LCG, and here is the sample 
 import time
 
 class LCG():
-    m = 281474976710656
-    a = 25214903917
-    c = 11
+    m = 55
+    a = 7
+    c = 3
 
     def __init__(self, seed):
         self.prev = seed
@@ -46,13 +48,24 @@ class LCG():
         self.prev = (self.a*self.prev+self.c)%self.m
         return self.prev 
 
-testing = LCG(24)
+testing = LCG(2)
 while(1):
     print testing.rand()
     time.sleep(1)
 ```
 
-If you run this code, you will see it nicely outputs random numbers.
+And when you run this code, you will see the algorithm is repeatedly generating sequence of numbers:
+
+>17
+>12
+>32
+>7
+>52
+>37
+>42
+>22
+>47
+>2
 
 ## The Advanced Random Number Generator
 As we discussed above, the LCG has limitation that the numbers can be predictable. Technically, if you have a good computer (like supercomputer!), sequence of the generated numbers, and an appropriate algorithm, you can find the seed number. This is not only LCG's limitation but all of pseudorandom number generators. Some might be harder to predict (or almost impossible with the current technology), but theoretically, every pseudorandom numbers can be predictable.\
@@ -68,4 +81,7 @@ I will use this to measure a noise with sensors. However, if you don't have Edis
 I believe using raspberry pi would be easier and more intuitive, but I use Edison because I don't have micro-sd card on my raspberry pi right now :D
 
 #### Preperation
+For anyone who uses the Intel Edison for the first time, here is [user guide](https://software.intel.com/en-us/intel-edison-board-user-guide) might be helpful.
+	* [Instruction](https://software.intel.com/en-us/assembling-intel-edison-board-with-arduino-expansion-board) for assembling
+	* [Instruction](https://software.intel.com/en-us/setting-up-serial-terminal-intel-edison-board) for communicating with the device via USB terminal
 

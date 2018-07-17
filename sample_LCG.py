@@ -3,9 +3,9 @@
 import time
 
 class LCG():
-    m = 281474976710656
-    a = 25214903917
-    c = 11
+    m = 55
+    a = 7
+    c = 3
 
     def __init__(self, seed):
         self.prev = seed
@@ -14,7 +14,7 @@ class LCG():
         self.prev = (self.a*self.prev+self.c)%self.m
         return self.prev 
 
-testing = LCG(24)
+testing = LCG(2)
 while(1):
     print testing.rand()
     time.sleep(1)
