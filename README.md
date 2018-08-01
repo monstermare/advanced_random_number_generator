@@ -26,7 +26,7 @@ the seed number ![equation](https://latex.codecogs.com/gif.latex?\fn_phv&space;X
 
 In LCG, it is really important to pick a good number for those constants to have a maximum period length. As your period length gets longer, the numbers generated are more safe from the prediction. 
 You can calculate the best combinations for practice, 
-but in this practice, we will pick some small numbers so we can see the cycle of numbers generated
+but in this practice, we will pick some small _prime_ numbers so we can see the cycle of numbers generated
 >m = 10\
 >a = 5\
 >c = 1\
@@ -75,4 +75,123 @@ I believe using raspberry pi would be easier and more intuitive, but I use Ediso
 For anyone who uses the Intel Edison for the first time, here is [user guide](https://software.intel.com/en-us/intel-edison-board-user-guide) might be helpful.
 	* [Instruction](https://software.intel.com/en-us/assembling-intel-edison-board-with-arduino-expansion-board) for assembling
 	* [Instruction](https://software.intel.com/en-us/setting-up-serial-terminal-intel-edison-board) for communicating with the device via USB terminal
+
+### Modules
+For this project, we are going to use 3 sensor modules: Light, Sound, and Temperature modules.
+You do not need to use exactly same modules what I'm using. I'm using those because I only have three, so if you have another module or just have one of them, that is totally fine.
+
+### MRAA
+MRAA is the low level skeleton library for communication on GNU/Linux platforms. For more information, [this link](https://github.com/intel-iot-devkit/mraa) would be helpful. The reason we are going to use this library is to communicate with modules. To check if the library is working, we are going to create _Hello Mraa_ c file:
+
+```c
+#include "mraa.h"
+
+int main(int argc, char** argv){
+	const char* board_name = mraa_get_platform_name();
+	fprintf(stdout, "hello mraa\n Version: %s\n Running on %s\n", mraa_get_version(), board_name);
+	mraa_deinit();
+
+	return MRAA_SUCCESS;
+}
+```
+
+We have to compile to create an executable file first.\
+suppose we have c file named _hello.c_, then
+
+> gcc -o hello hello.c -lmraa
+
+would generate _hello_ file.
+
+If the compiler cannot recognize functions, then you might want to update mraa library.
+
+#### Update MRAA
+For some reason, if you are unable to compile, then try updating mraa library.
+
+> echo "src mraa-upm http://iotdk.intel.com/repos/3.5/intelgalactic/opkg/i586" > /etc/opkg/mraa-upm.conf
+> opkg update
+> opkg install mraa
+
+### Using Modules
+Here is a code that reads data from sensors:
+
+```c
+#include "mraa.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <math.h>
+
+//referenced from the 'Grove Temperature Sensor'
+const int B = 4275;               // B value of the thermistor
+const int R0 = 100000;            // R0 = 100k
+
+unsigned int period=1000; // used for the sound sensor 
+
+// declare the analog input contexts
+mraa_aio_context temp;
+mraa_aio_context light;
+mraa_aio_context sound;
+
+// initialize the contexts
+void init(void){
+	temp = mraa_aio_init(0);
+	light = mraa_aio_init(1);
+	sound = mraa_aio_init(2);
+}
+
+void measureSensors(void){
+	// if the sensors are not initialized, exit with 1
+	if(temp==NULL||light==NULL||sound==NULL){
+			fprintf(stderr,"unable to initialize AIO");
+		exit(1);
+	}
+	char buf[50];
+	uint16_t temp_val;
+	uint16_t light_val;
+	uint16_t sound_val;
+	float R;
+	float temperature;
+	float adj_temp;
+	float adj_light;
+	float adj_sound;
+	int n;
+	int index;
+	while(1){
+		adj_sound = 0;
+		adj_temp = 0;
+		adj_light = 0;
+		// mreasuring data from sensors and finding average value
+		for(index=0;index<1000000;index+=period){
+			//measuring analog data
+			sound_val = mraa_aio_read(sound);
+			temp_val = mraa_aio_read(temp);
+			light_val = mraa_aio_read(light);
+			//recording sound
+			adj_sound += sound_val;
+			//recording temperature
+			R = R0*(1023.0/temp_val-1.0);
+			adj_temp += 1.0/(log(R/R0)/B+1/298.15)-273.15;
+			//recording light
+			adj_light += light_val;
+			usleep(period);
+		}
+    adj_temp = adj_temp/(1000000/period);
+		adj_light = adj_light/(1000000/period);
+		adj_sound = adj_sound/(1000000/period);
+		sprintf(buf, "temp:%.1f\tlight:%.1f\tsound:%.1f\n",adj_temp,adj_light,adj_sound);
+		n = strlen(buf);
+		write(1,buf,n);
+	}
+}
+
+int main(int argv, char **argc){
+	init();
+	measureSensors();
+}
+```
+
+## References
+* [Updating MRAA on Edison](https://upm.mraa.io/Documentation/mraa.html)
 
