@@ -29,7 +29,7 @@ You can calculate the best combinations for practice,
 but in this practice, we will pick some small _prime_ numbers so we can see the cycle of numbers generated
 >m = 10\
 >a = 5\
->c = 1\
+>c = 1
 
 
 So now we get everything we need for developing the LCG, and here is the sample code that outputs random numbers to check if it is working nicely.
@@ -111,8 +111,8 @@ For some reason, if you are unable to compile, then try updating mraa library.
 > opkg update
 > opkg install mraa
 
-### Using Modules
-Here is a code that reads data from sensors:
+### Using Sensor Modules
+Once you have mraa, receiving data from the sensor is a piece of cake. Initialize, read, and print. Done. For those who want to check if the sensors are working, here is a sample code that reads data from sensors:
 
 ```c
 #include "mraa.h"
@@ -127,7 +127,7 @@ Here is a code that reads data from sensors:
 const int B = 4275;               // B value of the thermistor
 const int R0 = 100000;            // R0 = 100k
 
-unsigned int period=1000; // used for the sound sensor 
+unsigned int wait=1000; // used for the sound sensor 
 
 // declare the analog input contexts
 mraa_aio_context temp;
@@ -136,9 +136,10 @@ mraa_aio_context sound;
 
 // initialize the contexts
 void init(void){
-	temp = mraa_aio_init(0);
-	light = mraa_aio_init(1);
-	sound = mraa_aio_init(2);
+	// aio means analog, and you must plug temperature sensor on AIO0, light sensor on AIO1, and sound sensor on AIO2
+	temp = mraa_aio_init(0); // AIO0
+	light = mraa_aio_init(1); // AIO1
+	sound = mraa_aio_init(2); // AIO2
 }
 
 void measureSensors(void){
@@ -163,7 +164,7 @@ void measureSensors(void){
 		adj_temp = 0;
 		adj_light = 0;
 		// mreasuring data from sensors and finding average value
-		for(index=0;index<1000000;index+=period){
+		for(index=0;index<1000000;index+=wait){
 			//measuring analog data
 			sound_val = mraa_aio_read(sound);
 			temp_val = mraa_aio_read(temp);
@@ -175,11 +176,11 @@ void measureSensors(void){
 			adj_temp += 1.0/(log(R/R0)/B+1/298.15)-273.15;
 			//recording light
 			adj_light += light_val;
-			usleep(period);
+			usleep(wait);
 		}
-    adj_temp = adj_temp/(1000000/period);
-		adj_light = adj_light/(1000000/period);
-		adj_sound = adj_sound/(1000000/period);
+    adj_temp = adj_temp/(1000000/wait);
+		adj_light = adj_light/(1000000/wait);
+		adj_sound = adj_sound/(1000000/wait);
 		sprintf(buf, "temp:%.1f\tlight:%.1f\tsound:%.1f\n",adj_temp,adj_light,adj_sound);
 		n = strlen(buf);
 		write(1,buf,n);
@@ -190,6 +191,22 @@ int main(int argv, char **argc){
 	init();
 	measureSensors();
 }
+```
+
+Once you compile and run the code, you might see outputs like:
+>temp:23.1	light:700.3	sound:103.6
+and that is somewhat measurable noises we want to get
+
+### Generate Random numbers using Sensors
+Now, we have everything we need to build the _Advanced Random Number Generator_. What we want to do is using noises and use it to make a _noise_ on the generator. Recall the LCG we used above:
+
+> output = (a\*input+c)%m\
+> where a=5, c=1, m=10
+
+The LCG we tested with a seed number=2, it repeatedly generates a sequence of 10 numbers. Now, we are going to create some noise on the same algorithm and make a remarkable result:
+
+```c
+
 ```
 
 ## References

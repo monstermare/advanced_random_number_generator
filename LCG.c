@@ -5,12 +5,18 @@
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
+#include <getopt.h>
 
 //referenced from the 'Grove Temperature Sensor'
 const int B = 4275;               // B value of the thermistor
 const int R0 = 100000;            // R0 = 100k
 
-unsigned int wait=1000; // used for the sound sensor 
+unsigned short wait=1000; // wait 1000 microseconds after the measurement
+unsigned short period = 1000000; // every 1 second, outputs the data
+
+const unsigned short M = 10;
+const unsigned short A = 5;
+const unsigned short C = 1;
 
 // declare the analog input contexts
 mraa_aio_context temp;
@@ -18,17 +24,32 @@ mraa_aio_context light;
 mraa_aio_context sound;
 
 // initialize the contexts
-void init(void){
+int init(int argv, char **argc){
 	// aio means analog, and you must plug temperature sensor on AIO0, light sensor on AIO1, and sound sensor on AIO2
 	temp = mraa_aio_init(0); // AIO0
 	light = mraa_aio_init(1); // AIO1
 	sound = mraa_aio_init(2); // AIO2
+	if(argv>2){
+		fprintf(stderr, "too many arguments.\n\tUsage: lcg <seed number>\n");
+		exit(1);
+	}else if(argv<2){
+		fprintf(stderr, "seed number must be provided.\n\tUsage: lcg <seed number>\n");
+		exit(1);
+	}else{
+		int seed = atoi(argc[1]);
+		if(seed==0||seed>=M){
+			fprintf(stderr, "invalid number. number must be an integer smaller than %d.\n\tUsage: lcg <seed number>\n",M);
+			exit(1);
+		}
+		return seed;
+	}
+
 }
 
-void measureSensors(void){
+void measureSensors(int seed){
 	// if the sensors are not initialized, exit with 1
 	if(temp==NULL||light==NULL||sound==NULL){
-			fprintf(stderr,"unable to initialize AIO");
+		fprintf(stderr,"unable to initialize AIO");
 		exit(1);
 	}
 	char buf[50];
@@ -42,12 +63,14 @@ void measureSensors(void){
 	float adj_sound;
 	int n;
 	int index;
+	int frequency = period/wait;
+	int prev = seed;
 	while(1){
 		adj_sound = 0;
 		adj_temp = 0;
 		adj_light = 0;
 		// mreasuring data from sensors and finding average value
-		for(index=0;index<1000000;index+=wait){
+		for(index=0;index<period;index+=wait){
 			//measuring analog data
 			sound_val = mraa_aio_read(sound);
 			temp_val = mraa_aio_read(temp);
@@ -61,16 +84,18 @@ void measureSensors(void){
 			adj_light += light_val;
 			usleep(wait);
 		}
-    adj_temp = adj_temp/(1000000/wait);
-		adj_light = adj_light/(1000000/wait);
-		adj_sound = adj_sound/(1000000/wait);
-		sprintf(buf, "temp:%.1f\tlight:%.1f\tsound:%.1f\n",adj_temp,adj_light,adj_sound);
+    adj_temp = adj_temp/frequency;
+		adj_light = adj_light/frequency;
+		adj_sound = adj_sound/frequency;
+		//sprintf(buf, "temp:%.1f\tlight:%.1f\tsound:%.1f\n",adj_temp,adj_light,adj_sound);
+		int rand = prev+
+		rand = (A*rand+C)%M;
 		n = strlen(buf);
 		write(1,buf,n);
 	}
 }
 
 int main(int argv, char **argc){
-	init();
-	measureSensors();
+	int seed = init(int argv, char **argc);
+	measureSensors(seed);
 }
