@@ -201,7 +201,7 @@ and that is somewhat measurable noises we want to get
 Now, we have everything we need to build the _Advanced Random Number Generator_. What we want to do is using noises and use it to make a _noise_ on the generator. Recall the LCG we used above:
 
 > output = (a\*input+c)%m\
-> where a=5, c=1, m=10
+> where a=55, c=3, m=7
 
 The LCG we tested with a seed number=2, it repeatedly generates a sequence of 10 numbers. Now, we are going to create some noise on the same algorithm and make a remarkable result.\
 Here is the sample code that creates noised-random-numbers:
