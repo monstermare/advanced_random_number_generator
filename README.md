@@ -324,7 +324,7 @@ The second experiment is adding some noise and making it is really unpredictable
 
 ## Beyond the scope of the book
 Isn't interesting to see you can actually make your own random number is really powerful? If you are fascinated with this idea or want to use this idea to your project or anything, there is a great website that you may like to see.\
-[Random.org](https://www.random.org) is the website that presents a true randomness using same idea we discussed. This idea is also inspired by this website.
+[Random.org](https://www.random.org) is the website that presents a true randomness, and the idea we discussed is strongly inspired by the website.
 
 ## References
 * Intel Edison(https://software.intel.com/en-us/intel-edison-board-user-guide)
