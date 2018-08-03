@@ -326,7 +326,7 @@ Isn't interesting to see you can actually make your own random number is really 
 [Random.org](https://www.random.org) is the website that presents a true randomness using same idea we discussed. This idea is also inspired by this website.
 
 ## References
-* [Intel Edison](https://software.intel.com/en-us/intel-edison-board-user-guide)(https://software.intel.com/en-us/intel-edison-board-user-guide)
-* [Updating MRAA on Edison](https://upm.mraa.io/Documentation/mraa.html)(https://upm.mraa.io/Documentation/mraa.html)
-* [Random.org](http://www.random.org)(http://www.random.org)
-* [LCG Wikipedia link](https://en.wikipedia.org/wiki/Linear_congruential_generator)(https://en.wikipedia.org/wiki/Linear_congruential_generator)
+* Intel Edison(https://software.intel.com/en-us/intel-edison-board-user-guide)
+* Updating MRAA on Edison(https://upm.mraa.io/Documentation/mraa.html)
+* Random.org(http://www.random.org)(http://www.random.org)
+* LCG Wikipedia link(https://en.wikipedia.org/wiki/Linear_congruential_generator)
