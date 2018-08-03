@@ -194,7 +194,7 @@ int main(int argv, char **argc){
 ```
 
 Once you compile and run the code, you might see outputs like:
->temp:23.1	light:700.3	sound:103.6
+>temp:23.1	light:700.3	sound:103.6\
 and that is somewhat measurable noises we want to get
 
 ### Generate Random numbers using Sensors
